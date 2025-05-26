@@ -23,6 +23,9 @@ text.split("").forEach(char => {
   roadText.appendChild(span);
 });
 
+gsap.set(roadText, { opacity: 1 });
+gsap.set(roadText.querySelectorAll("span"), { opacity: 0 });
+
 let scrollTween;
 
 function createAnimation() {
