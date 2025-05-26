@@ -3,8 +3,8 @@ gsap.registerPlugin(ScrollTrigger);
 const car = document.querySelector(".car");
 const road = document.querySelector(".road");
 const roadText = document.querySelector(".road-text");
+const valueCards = document.querySelector(".value-cards");
 
-// Wrap each letter of the text in a <span>
 const text = roadText.textContent.trim();
 roadText.innerHTML = "";
 
@@ -16,22 +16,18 @@ text.split("").forEach(char => {
     span.style.display = "inline-block";
   } else {
     span.textContent = char;
-    span.style.opacity = "0"; // initially hidden
+    span.style.opacity = "0";
     span.style.display = "inline-block";
   }
   roadText.appendChild(span);
 });
 
-// Increase totalScroll to allow longer scroll distance
-const totalScroll = 1900;  // doubled from 1500
-
-// Adjust this to wherever you want the text shift to start (in px or fraction of window width)
-const shiftStartX = window.innerWidth * 0.3;  // same as before
+const totalScroll = 2000;
+const shiftStartX = window.innerWidth * 0.3;
+const fadeDistance = 200;
 
 gsap.to(car, {
-  // move car farther based on the new totalScroll (increase offset too)
-  x: () => window.innerWidth + 500,  // increased from 450 to 900
-
+  x: () => window.innerWidth + 500,
   ease: "none",
   scrollTrigger: {
     trigger: ".road-container",
@@ -43,38 +39,61 @@ gsap.to(car, {
     onUpdate: self => {
       const roadRect = road.getBoundingClientRect();
       const carRect = car.getBoundingClientRect();
-
       const carFrontX = carRect.left + carRect.width * 0.5;
 
-      // Update green bar width
+      const roadBackgroundX = -carFrontX * 0.5;
+      gsap.set(".road", { backgroundPositionX: `${roadBackgroundX}px` });
+
       const greenWidth = Math.max(0, carFrontX - roadRect.left);
       gsap.set(".road-green", { width: greenWidth });
 
-      // Reveal each letter as car front crosses it
       const spans = roadText.querySelectorAll("span");
       spans.forEach(span => {
         const spanRect = span.getBoundingClientRect();
         const spanCenter = spanRect.left + spanRect.width / 2;
-
         span.style.opacity = carFrontX >= spanCenter ? "1" : "0";
       });
 
-      // Shift text left only after car passes shiftStartX
       if (carFrontX >= shiftStartX) {
-        // Increase maxShift so text can move fully out
-        const maxShift = window.innerWidth * 1.0;  // was 0.5, now full width
-        const progressAfterShiftStart = (carFrontX - shiftStartX) / window.innerWidth;
-        const shiftAmount = Math.min(progressAfterShiftStart * totalScroll * 0.5, maxShift);
+        const maxShift = window.innerWidth * 1.0;
+        const progress = (carFrontX - shiftStartX) / window.innerWidth;
+        const shiftAmount = Math.min(progress * totalScroll * 0.5, maxShift);
 
-        gsap.to(roadText, {
+        gsap.to([roadText, valueCards], {
           x: -shiftAmount,
           duration: 0.2,
           ease: "power1.out"
         });
       } else {
-        // Reset text position before shift start
-        gsap.set(roadText, { x: 0 });
+        gsap.set([roadText, valueCards], { x: 0 });
       }
+
+      const cards = document.querySelectorAll('.value-card');
+      cards.forEach((card, i) => {
+        const cardRect = card.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+
+        const distance = carFrontX - cardCenterX;
+        let opacity;
+
+        if (distance >= 0) {
+          opacity = 1;
+        } else if (distance >= -fadeDistance && distance < 0) {
+          opacity = 1 + distance / fadeDistance;
+        } else {
+          opacity = 0;
+        }
+
+        opacity = Math.min(Math.max(opacity, 0), 1);
+
+        gsap.set(card, { opacity, scale: 1 });
+
+        if (opacity > 0 && !card.classList.contains('visible')) {
+          card.classList.add('visible');
+        } else if (opacity === 0 && card.classList.contains('visible')) {
+          card.classList.remove('visible');
+        }
+      });
     }
   }
 });

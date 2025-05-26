@@ -12,7 +12,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible; /* Make sure it's not hiding anything */
+  overflow: visible;
 }
 
 .road {
@@ -20,7 +20,7 @@ body {
   height: 100px;
   background-color: #292929;
   position: relative;
-  overflow: hidden; /* fine now, since car is outside */
+  overflow: hidden;
   z-index: 0;
 }
 
@@ -42,20 +42,19 @@ body {
   transform: translateY(-50%);
   height: 250px;
   width: auto;
-  z-index: 10; 
+  z-index: 10;
 }
 
 .road-text {
   position: absolute;
   bottom: 20%;
   left: 40%;
-  transform: translateX(-50%) rotateX(20deg);  /* only rotate */
+  transform: translateX(-50%) rotateX(20deg);
   transform-origin: left bottom;
   color: black;
   font-size: 6em;
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
-  opacity: 0;
   pointer-events: none;
   z-index: 5;
   text-transform: uppercase;
@@ -71,5 +70,156 @@ body {
 }
 
 .spacer {
-  height: 100vh; /* Scrollable only after animation completes */
+  height: 100vh;
+}
+
+.value-cards {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 45px;
+  padding: 0 10%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.value-card {
+  opacity: 0;
+  scale: 0.8;
+  transition: all 0.3s ease;
+  padding: 1.2em 1.8em;
+  border-radius: 12px;
+  font-size: 1.2em;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.orange {
+  background-color: #e8682d;
+}
+
+.white {
+  background-color: #ffffff;
+  color: #111;
+}
+
+.blue {
+  background-color: #5fc2ed;
+  color: #fff;
+}
+
+.lemon {
+  background-color: #dcf766;
+  color: #000;
+}
+
+.card1 {
+  width: 350px;
+  height: 70px;
+  margin-bottom: 175px;
+  margin-top: 60px;
+  position: relative;
+}
+
+.card1 .icon {
+  position: absolute;
+  top: 28px;
+  right: 15px;
+}
+
+.card1 .value {
+  font-size: 3.1em;
+  font-weight: 900;
+  color: #000;
+  position: absolute;
+  top: 15px;
+  left: 20px;
+}
+
+.card1 .description {
+  font-size: 0.9em;
+  color: grey;
+  text-align: left;
+  position: absolute;
+  left: 165px;
+}
+
+.card2 {
+  width: 135px;
+  height: 130px;
+  position: relative;
+  left: -40px;
+}
+
+.card2 .value {
+  font-size: 3.2em;
+  font-weight: 900;
+  color: #000;
+  position: absolute;
+  left: 30px;
+}
+
+.card2 .description {
+  font-size: 0.9em;
+  color: rgb(55, 53, 53);
+  text-align: left;
+  position: relative;
+  top: 65px;
+}
+
+.card3 {
+  width: 125px;
+  height: 130px;
+  position: relative;
+}
+
+.card3 .value {
+  font-size: 3.2em;
+  font-weight: 900;
+  color: #000;
+  position: absolute;
+  left: 30px;
+}
+
+.card3 .description {
+  font-size: 0.9em;
+  color: rgb(55, 53, 53);
+  text-align: left;
+  position: relative;
+  top: 65px;
+}
+
+.card4 {
+  width: 350px;
+  height: 70px;
+  margin-bottom: 10px;
+  margin-top: 175px;
+  position: relative;
+  left: -250px;
+}
+
+.card4 .icon {
+  position: absolute;
+  top: 28px;
+  left: 15px;
+}
+
+.card4 .value {
+  font-size: 3.1em;
+  font-weight: 900;
+  color: #fff;
+  position: absolute;
+  top: 15px;
+  left: 115px;
+}
+
+.card4 .description {
+  font-size: 0.9em;
+  color: white;
+  text-align: left;
+  position: absolute;
+  left: 270px;
 }
