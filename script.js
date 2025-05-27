@@ -5,6 +5,7 @@ const road = document.querySelector(".road");
 const roadText = document.querySelector(".road-text");
 const valueCards = document.querySelector(".value-cards");
 const roadContainer = document.querySelector(".road-container");
+const roadWrapper = document.querySelector(".road-wrapper");
 
 const text = roadText.textContent.trim();
 roadText.innerHTML = "";
@@ -34,19 +35,20 @@ function createAnimation() {
     scrollTween.kill();
   }
 
-  const containerRect = roadContainer.getBoundingClientRect();
-  const totalScroll = containerRect.width * 2;
-  const targetX = containerRect.width + 500;
+  const wrapperRect = roadWrapper.getBoundingClientRect();
+  const totalScroll = wrapperRect.width * 2;
+  const targetX = wrapperRect.width + 500;
 
   scrollTween = gsap.to(car, {
     x: targetX,
     ease: "none",
     scrollTrigger: {
-      trigger: ".road-container",
+      trigger: ".road-wrapper",
       start: "top top",
       end: "+=" + totalScroll,
       scrub: true,
       pin: true,
+      pinSpacing: true,
       anticipatePin: 1,
       onUpdate: self => {
         const roadRect = road.getBoundingClientRect();
@@ -109,13 +111,18 @@ function createAnimation() {
             card.classList.remove('visible');
           }
         });
-      }
+      },
+      onLeave: () => {}
     }
   });
 }
 
 createAnimation();
 
+let resizeTimeout;
 window.addEventListener("resize", () => {
-  createAnimation();
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    createAnimation();
+  }, 250);
 });
